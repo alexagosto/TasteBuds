@@ -56,9 +56,9 @@ func recipesHandler(w http.ResponseWriter, r *http.Request) {
 		searchResults.Results = filteredResults
 	}
 
-	// Encode the filtered results as JSON and send the response
+	// Send the results as a JSON object
 	w.Header().Set("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(searchResults)
+	err = json.NewEncoder(w).Encode(searchResults.Results)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
