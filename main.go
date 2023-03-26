@@ -17,7 +17,9 @@ type Recipe struct {
 
 // Define the SearchResults struct
 type SearchResults struct {
-	Results []Recipe `json:"results"`
+	Hits []struct {
+		Recipe Recipe `json:"recipe"`
+	} `json:"hits"`
 }
 
 // Define the endpoint function
@@ -30,7 +32,10 @@ func recipesHandler(w http.ResponseWriter, r *http.Request) {
 	ingredients := strings.Split(q, ",")
 
 	// Call the API and get the results
-	resp, err := http.Get("http://www.recipepuppy.com/api/?i=" + q + "&p=1")
+	appID := "your_app_id"   // replace with your Edamam app ID
+	appKey := "your_app_key" // replace with your Edamam app key
+	url := fmt.Sprintf("https://api.edamam.com/search?q=%s&app_id=%s&app_key=%s", q, appID, appKey)
+	resp, err := http.Get(url)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -48,17 +53,26 @@ func recipesHandler(w http.ResponseWriter, r *http.Request) {
 	// Filter the results if exclusive is true
 	if exclusive == "true" {
 		var filteredResults []Recipe
-		for _, result := range searchResults.Results {
-			if containsIngredients(result.Ingredients, ingredients) {
-				filteredResults = append(filteredResults, result)
+		for _, hit := range searchResults.Hits {
+			if containsIngredients(hit.Recipe.Ingredients, ingredients) {
+				filteredResults = append(filteredResults, hit.Recipe)
 			}
 		}
-		searchResults.Results = filteredResults
+		searchResults.Hits = []struct {
+			Recipe Recipe `json:"recipe"`
+		}{}
+		for _, filteredResult := range filteredResults {
+			searchResults.Hits = append(searchResults.Hits, struct {
+				Recipe Recipe `json:"recipe"`
+			}{
+				Recipe: filteredResult,
+			})
+		}
 	}
 
-	// Send the results as a JSON object
+	// Encode the filtered results as JSON and send the response
 	w.Header().Set("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(searchResults.Results)
+	err = json.NewEncoder(w).Encode(searchResults)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
