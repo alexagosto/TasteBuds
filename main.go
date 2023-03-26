@@ -8,11 +8,17 @@ import (
 	"strings"
 )
 
+// Define the Ingredient struct
+type Ingredient struct {
+	Text   string  `json:"text"`
+	Weight float64 `json:"weight"`
+}
+
 // Define the Recipe struct
 type Recipe struct {
-	Title       string   `json:"title"`
-	Ingredients []string `json:"ingredients"`
-	Link        string   `json:"link"`
+	Title       string       `json:"title"`
+	Ingredients []Ingredient `json:"ingredients"`
+	Link        string       `json:"url"`
 }
 
 // Define the SearchResults struct
@@ -32,9 +38,9 @@ func recipesHandler(w http.ResponseWriter, r *http.Request) {
 	ingredients := strings.Split(q, ",")
 
 	// Call the API and get the results
-	appID := "your_app_id"   // replace with your Edamam app ID
-	appKey := "your_app_key" // replace with your Edamam app key
-	url := fmt.Sprintf("https://api.edamam.com/search?q=%s&app_id=%s&app_key=%s", q, appID, appKey)
+	appID := "e19c9152"                          // replace with your Edamam app ID
+	appKey := "41926769d0131d663c06113f7c4e431f" // replace with your Edamam app key
+	url := fmt.Sprintf("https://api.edamam.com/api/recipes/v2?type=public&q=%s&app_id=%s&app_key=%s", q, appID, appKey)
 	resp, err := http.Get(url)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -80,11 +86,11 @@ func recipesHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // Helper function to check if a recipe contains all the required ingredients
-func containsIngredients(recipeIngredients []string, requiredIngredients []string) bool {
+func containsIngredients(recipeIngredients []Ingredient, requiredIngredients []string) bool {
 	for _, requiredIngredient := range requiredIngredients {
 		found := false
-		for _, recipeIngredient := range recipeIngredients {
-			if strings.TrimSpace(strings.ToLower(requiredIngredient)) == strings.TrimSpace(strings.ToLower(recipeIngredient)) {
+		for _, ingredient := range recipeIngredients {
+			if strings.TrimSpace(strings.ToLower(requiredIngredient)) == strings.TrimSpace(strings.ToLower(ingredient.Text)) {
 				found = true
 				break
 			}
@@ -107,3 +113,9 @@ func main() {
 		panic(err)
 	}
 }
+
+// Test the function
+// Uncomment the following code to test the function
+//url := "http://localhost:8080/recipes?q=rice,chicken&exclusive=true"
+//resp, err := http.Get(url)
+//if err
