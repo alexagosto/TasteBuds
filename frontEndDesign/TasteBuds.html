@@ -1,0 +1,164 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> TasteBuds SignUp/LogIn </title>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+
+<body>
+
+    <div id="app" data-v-app style="text-align:center">
+        <h1>TasteBuds</h1>
+        <div v-if="showPNG">
+        <button @click="togglePNG">
+            <img :width=1550 :src="'Screenshot_30.png'"/>
+        </button> </div>
+        <div v-if="showSuLi">
+        <h1> Choose a way to access {{ title }}: </h1>
+        <h2> Sign Up  /  Log In </h2>
+        <div v-if="showSignUp">
+            <p>
+                <h4>Name</h4>
+                <h4>Username</h4>
+                <h4>Email</h4>
+                <h4>Password</h4>
+                <button @click="toggleSuLi">
+                    Continue
+                </button> 
+            </p>
+        </div>
+        
+        <div v-if="showLogIn">
+            <p>
+                <h4>Username/Email</h4>
+                <h4>Password</h4>
+                <button @click="toggleSuLi">
+                    Continue
+                </button> 
+            </p>
+        </div>
+        
+    <p>
+    <button @click="toggleSignUp">
+        <span v-if="!showSignUp">Sign Up</span>
+        <span v-if="showSignUp">Go Back</span>
+    </button> 
+    <button @click="toggleLogIn">
+        <span v-if="!showLogIn">Log In</span>
+        <span v-if="showLogIn">Go Back</span>
+
+    </button> </p> </div> 
+    <div v-if="showHome">
+        <p>
+            <h2 v-if="!showRecipes && !showProfile && !showOptions && !showFeed">
+                Where would you like to go?
+            </h2>
+            <div v-if="showProfile">
+                <h3>Name: Jonathan Beast</h3>
+                <img :width=80 :src="'images.jpg'"/>
+                <h4>Age: 42</h4>
+                <h4>Experience: Beginner</h4>
+                <button @click="toggleYourRecipes">
+                    <span v-if="!showYourRecipes">Your Recipes</span>
+                    <span v-if="showYourRecipes">Go Back</span>
+                </button>
+            </div>
+            <h3 v-if="!showRecipes && !showFeed && !showOptions">
+                <button @click="toggleProfile">
+                    <span v-if="!showProfile">Profile</span>
+                    <span v-if="showProfile">Go Back</span>
+                </button> 
+            </h3>
+            <div v-if="showRecipes">
+                <h2>Search for Recipes</h2>
+                      <form @submit.prevent="searchRecipes">
+                        <input v-model="query" type="text" placeholder="Search for recipes">
+                        <button type="submit">Search</button>
+                      </form>
+                      <ul>
+                        <li v-for="recipe in recipes" :key="recipe.title">
+                          <h3>{{ recipe.title }}</h3>
+                          <ul>
+                            <li v-for="ingredient in recipe.ingredients" :key="ingredient.text">{{ ingredient.text }}</li>
+                          </ul>
+                          <a :href="recipe.link">Link to recipe</a>
+                        </li>
+                      </ul>
+                  
+                  <script>
+                  import axios from 'axios';
+                  
+                  export default {
+                    data() {
+                      return {
+                        query: '',
+                        recipes: [],
+                      };
+                    },
+                    methods: {
+                      searchRecipes() {
+                        axios.get(`http://localhost:3000/recipes?q=${this.query}&exclusive=false`)
+                          .then(response => {
+                            this.recipes = response.data.hits.map(hit => hit.recipe);
+                          })
+                          .then(response => {console.log(response.data)})
+                          .catch(error => {
+                            console.error(error);
+                          });
+                      },
+                    },
+                  };
+                  </script>
+            </div>
+
+            <h3 v-if="!showProfile && !showFeed && !showOptions">
+                <button @click="toggleRecipes">
+                    <span v-if="!showRecipes">Recipes</span>
+                    <span v-if="showRecipes">Go Back</span>
+                </button> </h3>
+            <h3 v-if="!showProfile && !showRecipes && !showOptions">
+                <button @click="toggleFeed">
+                    <span v-if="!showFeed">Feed</span>
+                    <span v-if="showFeed">Go Back</span>
+                </button> </h3>
+            <h3 v-if="!showProfile && !showFeed && !showRecipes">
+                <button @click="toggleOptions">
+                    <span v-if="!showOptions">Options</span>
+                    <span v-if="showOptions">Go Back</span>
+                </button> </h3>        
+            <button @click="toggleSuLi">
+                Log Out
+            </button> 
+        </p>
+    </div>
+    <div v-if="showYourRecipes">
+        <h2>Your Recipes:</h2>
+        <form @submit.prevent="searchRecipes">
+            <input v-model="query" type="text" placeholder="Search for recipes">
+            <button type="submit">Search</button>
+          </form>
+          <ul>
+            <li v-for="recipe in recipes" :key="recipe.title">
+              <h3>{{ recipe.title }}</h3>
+              <ul>
+                <li v-for="ingredient in recipe.ingredients" :key="ingredient.text">{{ ingredient.text }}</li>
+              </ul>
+              <a :href="recipe.link">Link to recipe</a>
+            </li>
+          </ul>
+          
+        <button @click="toggleYourRecipes">
+            <span v-if="!showYourRecipes">Your Recipes</span>
+            <span v-if="showYourRecipes">Go Back</span>
+        </button>
+    </div>
+    </div>
+
+    
+
+    <script src="app.js"></script>
+</body>
+
+</html>
