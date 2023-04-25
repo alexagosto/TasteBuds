@@ -107,8 +107,8 @@ func main() {
 	http.HandleFunc("/recipes", recipesHandler)
 
 	// Start the server
-	fmt.Println("Server started on http://localhost:8080")
-	err := http.ListenAndServe(":8080", nil)
+	fmt.Println("Server started on http://localhost:3000")
+	err := http.ListenAndServe(":3000", nil)
 	if err != nil {
 		panic(err)
 	}
@@ -116,6 +116,6 @@ func main() {
 
 // Test the function
 // Uncomment the following code to test the function
-//url := "http://localhost:8080/recipes?q=rice,chicken&exclusive=true"
+//url := "http://localhost:3000/recipes?q=rice,chicken&exclusive=true"
 //resp, err := http.Get(url)
 //if err
