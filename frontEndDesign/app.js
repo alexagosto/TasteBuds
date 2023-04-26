@@ -1,6 +1,13 @@
 const app = Vue.createApp({
     data() {
         return {
+            Name: null,
+            Username: "",
+            Email: "",
+            UsernameOrEmail: "", //temp
+            Password: "",
+            InputYear: null, 
+            Age: 0,
             showPNG: true,
             showSuLi: false,
             showSignUp: false,
@@ -14,15 +21,36 @@ const app = Vue.createApp({
         }
     },
     methods: {
+        calcAge() {
+            this.Age = 2023-this.InputYear;
+        },
         togglePNG(){
             this.showPNG = !this.showPNG,
             this.showSuLi = !this.showSuLi
         },
         toggleSuLi(){
+            this.calcAge(),
             this.showHome = !this.showHome,
             this.showLogIn = false,
             this.showSignUp = false,
             this.showSuLi = !this.showSuLi
+        },
+        toggleLogOut(){
+            this.showHome = !this.showHome,
+            this.showLogIn = false,
+            this.showSignUp = false,
+            this.showSuLi = !this.showSuLi,
+            this.showHome = false,
+            this.showProfile = false,
+            this.showRecipes = false,
+            this.showFeed = false,
+            this.showOptions = false
+            this.Name = "",
+            this.InputYear = null,
+            this.Username = "",
+            this.Email = "",
+            this.Password = "",
+            this.UsernameOrEmail = ""
         },
         toggleSignUp(){
             this.showSignUp = !this.showSignUp,

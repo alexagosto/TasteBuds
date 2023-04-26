@@ -3,7 +3,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> TasteBuds SignUp/LogIn </title>
+    <title> TasteBuds </title>
     <script src="https://unpkg.com/vue@next"></script>
 </head>
 
@@ -18,12 +18,14 @@
         <div v-if="showSuLi">
         <h1> Choose a way to access {{ title }}: </h1>
         <h2> Sign Up  /  Log In </h2>
+
         <div v-if="showSignUp">
             <p>
-                <h4>Name</h4>
-                <h4>Username</h4>
-                <h4>Email</h4>
-                <h4>Password</h4>
+                <h4>Name <input v-model="Name" type="text" placeholder="John" ></h4>
+                <h4>Birthyear <input v-model.number="InputYear" type ="text" placeholder = 2000></h4>
+                <h4>Username <input v-model="Username" type="text" placeholder="john_apples33d"></h4>
+                <h4>Email <input v-model="Email" type="text" placeholder="john123@altmail.com"></h4>
+                <h4>Password <input v-model="Password" type="text" placeholder="Secure123"></h4>
                 <button @click="toggleSuLi">
                     Continue
                 </button> 
@@ -32,8 +34,8 @@
         
         <div v-if="showLogIn">
             <p>
-                <h4>Username/Email</h4>
-                <h4>Password</h4>
+                <h4>Username/Email <input v-model="UsernameOrEmail" type="text" placeholder="john_apples33d/john123@altmail.com"></h4>
+                <h4>Password <input v-model="Password" type="text" placeholder="Secure123"></h4>
                 <button @click="toggleSuLi">
                     Continue
                 </button> 
@@ -56,9 +58,11 @@
                 Where would you like to go?
             </h2>
             <div v-if="showProfile">
-                <h3>Name: Jonathan Beast</h3>
+                <h3 v-if="Name == null">Name: Jonathan Beast</h3>
+                <h3 v-if="Name != null">Name: {{ Name }}</h3>
                 <img :width=80 :src="'images.jpg'"/>
-                <h4>Age: 42</h4>
+                <h4 v-if="Age == 2023 || Age < 0">Age: 42</h4>
+                <h4 v-if="Age != 2023 && Age > -1">Age: {{Age}}</h4>
                 <h4>Experience: Beginner</h4>
                 <button @click="toggleYourRecipes">
                     <span v-if="!showYourRecipes">Your Recipes</span>
@@ -128,7 +132,7 @@
                     <span v-if="!showOptions">Options</span>
                     <span v-if="showOptions">Go Back</span>
                 </button> </h3>        
-            <button @click="toggleSuLi">
+            <button @click="toggleLogOut">
                 Log Out
             </button> 
         </p>
@@ -136,7 +140,7 @@
     <div v-if="showYourRecipes">
         <h2>Your Recipes:</h2>
         <form @submit.prevent="searchRecipes">
-            <input v-model="query" type="text" placeholder="Search for recipes">
+            <input v-model="pquery" type="text" placeholder="Search for recipes">
             <button type="submit">Search</button>
           </form>
           <ul>
