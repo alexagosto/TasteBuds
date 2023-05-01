@@ -21,11 +21,18 @@
 
         <div v-if="showSignUp">
             <p>
-                <h4>Name <input v-model="Name" type="text" placeholder="John" ></h4>
-                <h4>Birthyear <input v-model.number="InputYear" type ="text" placeholder = 2000></h4>
-                <h4>Username <input v-model="Username" type="text" placeholder="john_apples33d"></h4>
-                <h4>Email <input v-model="Email" type="text" placeholder="john123@altmail.com"></h4>
-                <h4>Password <input v-model="Password" type="text" placeholder="Secure123"></h4>
+                <h4>Name <input v-model="name" type="text" placeholder="John" ></h4>
+                <h4>Birthyear <input v-model.number="inputYear" type ="text" placeholder = 2000></h4>
+                <h4>Username <input v-model="username" type="text" placeholder="john_apples33d"></h4>
+                <h4>Email <input v-model="email" type="text" placeholder="john123@altmail.com"></h4>
+                <h4>Password <input v-model="password" type="text" placeholder="Secure123"></h4>
+                <h4>Cooking Experience <select v-model="cookingExperience">
+                <option disabled value="">Please select one</option>
+                <option>Beginner</option>
+                <option>Intermediate</option>
+                <option>Expert</option>
+                </select>     
+                </h4>
                 <button @click="toggleSuLi">
                     Continue
                 </button> 
@@ -34,8 +41,8 @@
         
         <div v-if="showLogIn">
             <p>
-                <h4>Username/Email <input v-model="UsernameOrEmail" type="text" placeholder="john_apples33d/john123@altmail.com"></h4>
-                <h4>Password <input v-model="Password" type="text" placeholder="Secure123"></h4>
+                <h4>Username/Email <input v-model="usernameOrEmail" type="text" placeholder="john_apples33d/john123@altmail.com"></h4>
+                <h4>Password <input v-model="password" type="text" placeholder="Secure123"></h4>
                 <button @click="toggleSuLi">
                     Continue
                 </button> 
@@ -58,12 +65,13 @@
                 Where would you like to go?
             </h2>
             <div v-if="showProfile">
-                <h3 v-if="Name == null">Name: Jonathan Beast</h3>
-                <h3 v-if="Name != null">Name: {{ Name }}</h3>
+                <h3 v-if="name == null">Name: Jonathan Beast</h3>
+                <h3 v-if="name != null">Name: {{ name }}</h3>
                 <img :width=80 :src="'images.jpg'"/>
-                <h4 v-if="Age == 2023 || Age < 0">Age: 42</h4>
-                <h4 v-if="Age != 2023 && Age > -1">Age: {{Age}}</h4>
-                <h4>Experience: Beginner</h4>
+                <h4 v-if="age == 2023 || age < 0">Age: 42</h4>
+                <h4 v-if="age != 2023 && age > -1">Age: {{age}}</h4>
+                <h4 v-if="cookingExperience == null">Experience: Beginner</h4>
+                <h4 v-if="cookingExperience != null">Experience: {{cookingExperience}}</h4>
                 <button @click="toggleYourRecipes">
                     <span v-if="!showYourRecipes">Your Recipes</span>
                     <span v-if="showYourRecipes">Go Back</span>
